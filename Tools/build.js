@@ -1,15 +1,11 @@
 const fs = require("fs");
 
-// Get the list of files in the "./Src" directory
-function getFiles() {
-	return fs.readdirSync("./Src"), fs.readdirSync("./Src").length;
-}
-
 // Minify the content by removing comments and extra whitespace
 function minify(content) {
 	content = content.replace(/--.*/g, "");
 	content = content.replace(/^\s*[\r\n]/gm, "");
 	content = content.replace(/\s+/g, " ");
+
 	return content;
 }
 
@@ -35,6 +31,10 @@ function createUtil() {
 function build() {
 	const files = getAllFiles("./Src");
 	let main = "";
+
+	// Add header
+	main += fs.readFileSync("./Src/header.lua", "utf8");
+	main += "\n\n";
 
 	// Add util
 	main += createUtil();
@@ -70,6 +70,20 @@ function getAllFiles(dirPath, arrayOfFiles) {
 	return arrayOfFiles;
 }
 
+function copyToMission() {
+	const path =
+		"C:/Users/Jakob/AppData/Roaming/Stormworks/data/missions/Util v4";
+
+	if (!fs.existsSync(path)) {
+		console.log(`Mission folder not found at ${path}`);
+		return;
+	}
+
+	fs.copyFileSync("./Out/main.lua", `${path}/script.lua`);
+
+	console.log(`Copied to ${path}`);
+}
+
 console.log(`Build started`);
 
 build();
@@ -79,3 +93,5 @@ console.log(
 		fs.readFileSync("./Out/main.lua", "utf8").length
 	} characters]`
 );
+
+copyToMission();
