@@ -38,7 +38,7 @@ function build() {
 	main += "-- Util v4 \n";
 	main += "-- Jake (PirateJake2000) \n";
 	main += "-- https://github.com/PirateJake2000/Util-V4\n";
-	main += `-- ${new Date().toLocaleString()}\n`;
+	main += `-- Built: ${new Date().toLocaleString()}\n`;
 
 	// Add header
 	main += fs.readFileSync("./Src/header.lua", "utf8").replace(/--.*/g, "");
