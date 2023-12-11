@@ -1,10 +1,12 @@
 const fs = require("fs");
+const os = require("os");
 
 // Minify the content by removing comments and extra whitespace
 function minify(content) {
 	content = content.replace(/--.*/g, "");
 	content = content.replace(/^\s*[\r\n]/gm, "");
 	content = content.replace(/\s+/g, " ");
+	content = content.replace("Util", "u");
 
 	return content;
 }
@@ -14,7 +16,7 @@ function createUtil() {
 	const srcPath = "./Src/library";
 	const files = fs.readdirSync(srcPath);
 
-	let util = "Util = {";
+	let util = "local u = {";
 
 	files.forEach((file) => {
 		if (file.endsWith(".lua")) {
@@ -35,7 +37,8 @@ function build() {
 	// Add credits
 	main += "-- Util v4 \n";
 	main += "-- Jake (PirateJake2000) \n";
-	main += "-- https://github.com/PirateJake2000/Util-V4";
+	main += "-- https://github.com/PirateJake2000/Util-V4\n";
+	main += `-- ${new Date().toLocaleString()}\n`;
 
 	// Add header
 	main += fs.readFileSync("./Src/header.lua", "utf8").replace(/--.*/g, "");
@@ -75,9 +78,10 @@ function getAllFiles(dirPath, arrayOfFiles) {
 	return arrayOfFiles;
 }
 
+// Copy the main.lua file to the Stormworks mission folder for faster testing
 function copyToMission() {
-	const path =
-		"C:/Users/Jakob/AppData/Roaming/Stormworks/data/missions/Util v4";
+	const username = os.userInfo().username;
+	const path = `C:/Users/${username}/AppData/Roaming/Stormworks/data/missions/Util v4`;
 
 	if (!fs.existsSync(path)) {
 		console.log(`Mission folder not found at ${path}`);
