@@ -24,7 +24,7 @@ function createUtil() {
 
 	util = util.slice(0, -1) + "\n}";
 
-	return util;
+	return minify(util);
 }
 
 // Build the main.lua file by combining the content of all .lua files in the "./Src" directory
@@ -32,9 +32,14 @@ function build() {
 	const files = getAllFiles("./Src");
 	let main = "";
 
+	// Add credits
+	main += "-- Util v4 \n";
+	main += "-- Jake (PirateJake2000) \n";
+	main += "-- https://github.com/PirateJake2000/Util-V4";
+
 	// Add header
-	main += fs.readFileSync("./Src/header.lua", "utf8");
-	main += "\n\n";
+	main += fs.readFileSync("./Src/header.lua", "utf8").replace(/--.*/g, "");
+	main += "\n";
 
 	// Add util
 	main += createUtil();
