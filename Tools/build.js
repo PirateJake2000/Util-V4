@@ -6,7 +6,7 @@ function minify(content) {
 	content = content.replace(/--.*/g, "");
 	content = content.replace(/^\s*[\r\n]/gm, "");
 	content = content.replace(/\s+/g, " ");
-	content = content.replace("Util", "u");
+	content = content.replace(/Util/g, "u");
 
 	return content;
 }
@@ -35,10 +35,11 @@ function build() {
 	let main = "";
 
 	// Add credits
+	main += "---@diagnostic disable: lowercase-global\n";
 	main += "-- Util v4 \n";
 	main += "-- Jake (PirateJake2000) \n";
 	main += "-- https://github.com/PirateJake2000/Util-V4\n";
-	main += `-- Built: ${new Date().toLocaleString()}\n`;
+	main += `-- Built: ${new Date().toLocaleString()}`;
 
 	// Add header
 	main += fs.readFileSync("./Src/header.lua", "utf8").replace(/--.*/g, "");
@@ -49,6 +50,9 @@ function build() {
 	main += "\n\n";
 
 	files.forEach((file) => {
+		if (file == "./Src/Header.lua") return;
+		if (file == "./Src/Footer.lua") return;
+
 		if (file.endsWith(".lua")) {
 			main += `-- ${file}\n`;
 			main += minify(fs.readFileSync(file, "utf8"));
@@ -57,6 +61,12 @@ function build() {
 			console.log(`-> ${file}`);
 		}
 	});
+
+	// Add footer
+	main += fs
+		.readFileSync("./Src/footer.lua", "utf8")
+		.replace(/--.*/g, "")
+		.replace(/Util/g, "u");
 
 	fs.writeFileSync("./Out/main.lua", main);
 }
