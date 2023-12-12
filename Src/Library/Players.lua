@@ -78,9 +78,9 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
     return player
 end
 
----@return UtilPlayer|nil
+---@return UtilPlayer
 function Util.Players.Get(steam_id)
-    return Util.Players.List[steam_id] or error("Player does not exist")
+    return Util.Players.List[steam_id]
 end
 
 ---@param steam_id integer
@@ -112,8 +112,10 @@ end
 ---@param is_admin boolean
 ---@param is_auth boolean
 function Util.Players.Leave(steam_id, name, peer_id, is_admin, is_auth)
-    if Util.Players.Get(steam_id):GetVehicle() ~= {} then
-        Util.Players.Get(steam_id):GetVehicle():DespawnGroup(true)
+    local player = Util.Players.Get(steam_id)
+
+    for _, vehicle in pairs(player:GetVehicles()) do
+        vehicle:Despawn()
     end
 
     Util.Players.Destroy(steam_id)
