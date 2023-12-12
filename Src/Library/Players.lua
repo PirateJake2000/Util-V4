@@ -1,3 +1,22 @@
+---@class UtilPlayer
+---@field name string
+---@field steamID integer recommended to convert to string
+---@field peerID integer
+---@field isAdmin boolean
+---@field isAuth boolean
+---@field vehicles table<integer, UtilVehicle>
+---
+---@field AddVehicle fun(self: self, vehicle: UtilVehicle)
+---@field RemoveVehicle fun(self: self, vehicle: UtilVehicle)
+---@field GetVehicle fun(self: self, vehicle: UtilVehicle)
+---@field Kill fun(self: self)
+---@field Revive fun(self: self)
+---@field SetData fun(self: self, hp: number, is_interactable: boolean, is_ai: boolean)
+---@field Message fun(self: self, message: string)
+---@field Notify fun(self: self, title: string, message: string, notificationType: SWNotifiationTypeEnum)
+---@field GetPos fun(self: self)
+---@field SetPos fun(self: self, newMatrix: SWMatrix)
+
 function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
     local player = {
         name = name,
