@@ -2,10 +2,20 @@
 -- Util v4 
 -- Jake (PirateJake2000) 
 -- https://github.com/PirateJake2000/Util-V4
--- Built: 11/12/2023, 23:58:04
+-- Built: 12/12/2023, 01:18:22
 
-function print(str)
-    server.announce("[Debug]", str, -1)
+function print(...)
+    local out = ""
+
+    for _, v in pairs({ ... }) do
+        out = out .. tostring(v) .. " "
+    end
+
+    server.announce("[Debug]", out, -1)
+end
+
+function error(str)
+    server.announce("[Error]", str, -1)
 end
 
 local u = { Callbacks = {}, Commands = {}, Events = {}, Players = {}, Timers = {}, Vehicles = {} }
@@ -17,20 +27,20 @@ function u.Commands.Check(full_message, user_peer_id, is_admin, is_auth, ...) lo
 -- ./Src/Library/Events.lua
 function u.Events.Create(name) if u.Events[name] then return end u.Events[name] = {} print("Created Event: " .. name) end function u.Events.Envoke(name, ...) if not u.Events[name] then u.Events.Create(name) end for _, callback in pairs(u.Events[name]) do callback(...) end end function u.Events.Hook(name, callback) if not u.Events[name] then u.Events.Create(name) end table.insert(u.Events[name], callback) end function u.Events.Unhook(name, callback) if not u.Events[name] then return end for i, v in pairs(u.Events[name]) do if v == callback then table.remove(u.Events[name], i) end end end function u.Events.Destroy(name) if not u.Events[name] then return end u.Events[name] = nil end 
 -- ./Src/Library/Players.lua
-function u.Players.Create(steam_id, name, peer_id, is_admin, is_auth) local player = { name = name, steamID = steam_id, peerID = peer_id, objectID = server.getPlayerCharacterID(peer_id), isAdmin = is_admin, isAuth = is_auth, vehicle = {}, AddVehicle = function(self, vehicle) print("spawned vehicle") self.vehicle = vehicle end, RemoveVehicle = function(self) self.vehicle = {} end, GetVehicle = function(self) return self.vehicle end, Kill = function(self) server.killCharacter(self.objectID) end, Revive = function(self) server.reviveCharacter(self.objectID) end, SetData = function(self, hp, is_interactable, is_ai) server.setCharacterData(self.objectID, hp, is_interactable, is_ai) end, Message = function(self, message) server.announce("[Server]", message, self.peerID) end, Notify = function(self, title, message, notificationType) server.notify(self.peerID, title, message, notificationType) end, GetPos = function(self) return server.getPlayerCharacterPos(self.peerID) end, SetPos = function(self, newMatrix) server.setPlayerCharacterPos(self.peerID, newMatrix) end, } u.Players.List[steam_id] = player return player end function u.Players.Get(steam_id) return u.Players.List[steam_id] end function u.Players.Destroy(steam_id) u.Players.List[steam_id] = nil end function u.Players.getSteamID(peer_id) for steam_id, player in pairs(u.Players.List) do if player.peerID == peer_id then return steam_id end end end function u.Players.getPeerID(steamID) for steam_id, player in pairs(u.Players.List) do if steam_id == steamID then return player.peerID end end end u.Players.List = {} 
+function u.Players.Create(steam_id, name, peer_id, is_admin, is_auth) local player = { name = name, steamID = steam_id, peerID = peer_id, objectID = server.getPlayerCharacterID(peer_id), isAdmin = is_admin, isAuth = is_auth, vehicle = nil, AddVehicle = function(self, vehicle) print("spawned vehicle") self.vehicle = vehicle end, RemoveVehicle = function(self) self.vehicle = {} end, GetVehicle = function(self) return self.vehicle or error("Player does not have a vehicle") end, Kill = function(self) server.killCharacter(self.objectID) end, Revive = function(self) server.reviveCharacter(self.objectID) end, SetData = function(self, hp, is_interactable, is_ai) server.setCharacterData(self.objectID, hp, is_interactable, is_ai) end, Message = function(self, message) server.announce("[Server]", message, self.peerID) end, Notify = function(self, title, message, notificationType) server.notify(self.peerID, title, message, notificationType) end, GetPos = function(self) return server.getPlayerCharacterPos(self.peerID) end, SetPos = function(self, newMatrix) server.setPlayerCharacterPos(self.peerID, newMatrix) end, } u.Players.List[steam_id] = player return player end function u.Players.Get(steam_id) return u.Players.List[steam_id] or error("Player does not exist") end function u.Players.Destroy(steam_id) u.Players.List[steam_id] = nil end function u.Players.getSteamID(peer_id) for steam_id, player in pairs(u.Players.List) do if player.peerID == peer_id then return steam_id end end end function u.Players.getPeerID(steamID) for steam_id, player in pairs(u.Players.List) do if steam_id == steamID then return player.peerID end end end function u.Players.Leave(steam_id, name, peer_id, is_admin, is_auth) if u.Players.Get(steam_id):GetVehicle() ~= {} then u.Players.Get(steam_id):GetVehicle():DespawnGroup(true) end u.Players.Destroy(steam_id) end u.Players.List = {} 
 -- ./Src/Library/Timers.lua
 function u.Timers.Create(duration, callback) local timer = { duration = duration, callback = callback, time = 0 } table.insert(u.Timers.List, timer) end function u.Timers.Update() for i, timer in pairs(u.Timers.List) do timer.time = timer.time + 1 if timer.time >= timer.duration then timer.callback() table.remove(u.Timers.List, i) end end end u.Timers.List = {} 
 -- ./Src/Library/Vehicles.lua
-function u.Vehicles.Create(vehicle_id, peer_id, x, y, z, groupCost, group_id) local vehicle = { vehicleID = vehicle_id, ownerID = peer_id, groupID = group_id, groupCost = groupCost, groupIDList = server.getVehicleGroup(group_id), ResetVehicleState = function(self) server.resetVehicleState(self.vehicleID) print("called resetVehicleState") end, } return vehicle end function u.Vehicles.Spawn(vehicle_id, peer_id, x, y, z, groupCost, group_id) local vehicle = u.Vehicles.Create(vehicle_id, peer_id, x, y, z, groupCost, group_id) local player = u.Players.Get(u.Players.getSteamID(peer_id)) player:AddVehicle(vehicle) u.Players.Get(u.Players.getSteamID(peer_id)):Notify("Vehicle Spawned", "Vehicle Spawned", 1) end 
+function u.Vehicles.Create(group_id, peer_id, x, y, z, groupCost) local vehicle = { ownerID = peer_id, groupID = group_id, groupCost = groupCost, groupIDList = server.getVehicleGroup(group_id), Reset = function(self) server.resetVehicleState(self.groupID) print("called resetVehicleState") end, Despawn = function(self) server.despawnVehicle(self.groupID, true) end, } return vehicle end function u.Vehicles.Spawn(group_id, peer_id, x, y, z, groupCost) print(group_id, peer_id, x, y, z, groupCost, group_id) local vehicle = u.Vehicles.Create(group_id, peer_id, x, y, z, groupCost) local player = u.Players.Get(u.Players.getSteamID(peer_id)) player:AddVehicle(vehicle) player:Notify("Vehicle Spawned", "Vehicle Spawned", 1) end 
 -- ./Src/main.lua
-u.Commands.Create("?ping", { "?ping", "?pong" }, function(full_message, user_peer_id, is_admin, is_auth, args) print("pong!") end) u.Commands.Create("?reset", { "?reset" }, function(full_message, user_peer_id, is_admin, is_auth, args) u.Players.Get(u.Players.getSteamID(user_peer_id)):GetVehicle():ResetVehicleState() print("reset vehicle") end) 
+u.Commands.Create("?ping", { "?ping", "?pong" }, function(full_message, user_peer_id, is_admin, is_auth, args) print("pong!") end) u.Commands.Create("?reset", { "?reset", "?r" }, function(full_message, user_peer_id, is_admin, is_auth, args) u.Players.Get(u.Players.getSteamID(user_peer_id)):GetVehicle():Reset() print("reset vehicle") end) u.Commands.Create("?c", { "?c", "?clean", "?d", "?despawn" }, function(full_message, user_peer_id, is_admin, is_auth, args) u.Players.Get(u.Players.getSteamID(user_peer_id)):GetVehicle():Despawn() end) 
 
 u.Events.Hook("onPlayerJoin", u.Players.Create)
 u.Events.Hook("onPlayerLeave", u.Players.Destroy)
 u.Events.Hook("onCustomCommand", u.Commands.Check)
 u.Events.Hook("onTick", u.Timers.Update)
 u.Events.Hook("onGroupSpawn", u.Vehicles.Spawn)
-
+u.Events.Hook("onPlayerLeave", u.Players.Leave)
 
 local playerList = server.getPlayers()
 for i = 1, #playerList do

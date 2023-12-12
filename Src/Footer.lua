@@ -4,7 +4,7 @@ Util.Events.Hook("onPlayerLeave", Util.Players.Destroy)
 Util.Events.Hook("onCustomCommand", Util.Commands.Check)
 Util.Events.Hook("onTick", Util.Timers.Update)
 Util.Events.Hook("onGroupSpawn", Util.Vehicles.Spawn)
-
+Util.Events.Hook("onPlayerLeave", Util.Players.Leave)
 
 local playerList = server.getPlayers()
 for i = 1, #playerList do
