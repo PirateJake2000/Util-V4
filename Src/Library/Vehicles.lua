@@ -4,7 +4,7 @@ function Util.Vehicles.Create(group_id, peer_id, x, y, z, groupCost)
         groupID = group_id,
         groupCost = groupCost,
 
-        groupIDList = server.getVehicleGroup(group_id),
+        vehicleIDList = server.getVehicleGroup(group_id),
 
         -- Methods
         Reset = function(self)
@@ -13,7 +13,7 @@ function Util.Vehicles.Create(group_id, peer_id, x, y, z, groupCost)
         end,
 
         Despawn = function(self)
-            server.despawnVehicle(self.groupID, true)
+            server.despawnGroup(self.groupID, true)
         end,
     }
 
