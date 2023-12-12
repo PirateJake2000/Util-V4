@@ -1,3 +1,10 @@
+---@class UtilTimer
+---@field duration number
+---@field callback function
+---@field time integer time elapsed in ticks
+
+---@param duration number
+---@param callback function
 function Util.Timers.Create(duration, callback)
     local timer = {
         duration = duration,
@@ -19,4 +26,5 @@ function Util.Timers.Update()
     end
 end
 
+---@type table<integer, UtilTimer>
 Util.Timers.List = {}
