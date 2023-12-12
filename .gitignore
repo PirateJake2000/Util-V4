@@ -1,3 +1,9 @@
+# quick note: you'll have to remove and remake this repo for these file ignorations to apply
+# theres probably another way, but i forgot
+
 # ignore folders/files that are generated automatically by running code, or arent needed
-/.vscode
-/Out
+.vscode
+Out
+
+# ignoring since it isnt needed for the framework itself
+Src/main.lua
