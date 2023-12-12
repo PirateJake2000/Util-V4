@@ -1,49 +1,75 @@
--- Created by @toastery on Discord
+--------------------------------------------------------------------------------
+-- Intellisense File
+--------------------------------------------------------------------------------
+---- // Info
+-- This file contains every Addon Lua function, callback, and type.
+-- Last updated for game version: v1.9.6
+
+---- // Credit
+-- Created by: @toastery (Discord)
+-- Updated by: @cuh6_ (Discord)
+
+-- GitHub Repo: https://github.com/Cuh4/StormworksAddonLuaDocumentation
+
+---- // Changelog (dd/mm/yy format)
+-- 30/11/2023
+--[[
+    - Fixed server.spawnAddonVehicle docs
+    - Fixed server.spawnVehicle docs
+    - Removed server.getVehicleName
+]]
+
+-------------------------
+-- LUA LSP DIAGNOSTICS SETTINGS
+-------------------------
 --- @diagnostic disable: lowercase-global
 --- @diagnostic disable: missing-return
 --- @diagnostic disable: duplicate-set-field
 
+-------------------------
+-- DEFINITIONS
+-------------------------
 server = {}
 property = {}
 matrix = {}
 debug = {}
 g_savedata = {}
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- MATRICES
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- @class SWMatrix
---- @field [1] number 
---- @field [2] number 
---- @field [3] number 
---- @field [4] number 
---- @field [5] number 
---- @field [6] number 
---- @field [7] number 
---- @field [8] number 
---- @field [9] number 
---- @field [10] number 
---- @field [11] number 
---- @field [12] number 
+--- @field [1] number
+--- @field [2] number
+--- @field [3] number
+--- @field [4] number
+--- @field [5] number
+--- @field [6] number
+--- @field [7] number
+--- @field [8] number
+--- @field [9] number
+--- @field [10] number
+--- @field [11] number
+--- @field [12] number
 --- @field [13] number x
 --- @field [14] number y
 --- @field [15] number z
---- @field [16] number 
+--- @field [16] number
 
 --- Multiplies two matrices together
---- @param matrix1 SWMatrix 
---- @param matrix2 SWMatrix 
+--- @param matrix1 SWMatrix
+--- @param matrix2 SWMatrix
 --- @return SWMatrix matrix
 function matrix.multiply(matrix1, matrix2) end
 
 --- Inverts the matrix
---- @param matrix SWMatrix 
+--- @param matrix SWMatrix
 --- @return SWMatrix matrix
 function matrix.invert(matrix) end
 
 --- Transposes a matrix
---- @param matrix SWMatrix 
+--- @param matrix SWMatrix
 --- @return SWMatrix matrix
 function matrix.transpose(matrix) end
 
@@ -67,9 +93,9 @@ function matrix.rotationY(radians) end
 function matrix.rotationZ(radians) end
 
 --- Returns your x,y,z points as a matrix
---- @param x number 
---- @param y number 
---- @param z number 
+--- @param x number
+--- @param y number
+--- @param z number
 --- @return SWMatrix matrix
 function matrix.translation(x, y, z) end
 
@@ -86,24 +112,24 @@ function matrix.distance(matrix1, matrix2) end
 
 --- Multiplies a matrix by a vec 4.
 --- @param matrix1 SWMatrix The matrix to multiply
---- @param x number 
---- @param y number 
---- @param z number 
---- @param w number 
+--- @param x number
+--- @param y number
+--- @param z number
+--- @param w number
 --- @return number out_x, number out_y, number out_z, number out_w
 function matrix.multiplyXYZW(matrix1, x, y, z, w) end
 
 --- Returns the rotation required to face an X Z vector
---- @param x number 
+--- @param x number
 --- @param z number
 --- @return number required_rotation
 function matrix.rotationToFaceXZ(x, z) end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- CALLBACKS
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- called every game tick
 --- @param game_ticks number the number of ticks since the last onTick call (normally 1, while sleeping 400.)
@@ -228,8 +254,18 @@ function onPlayerDie(steam_id, name, peer_id, is_admin, is_auth) end
 --- @param x number The x coordinate of the vehicle's spawn location relative to world space.
 --- @param y number The y coordinate of the vehicle's spawn location relative to world space.
 --- @param z number The z coordinate of the vehicle's spawn location relative to world space.
---- @param cost number The cost of the vehicle. Only calculated for player spawned vehicles.
-function onVehicleSpawn(vehicle_id, peer_id, x, y, z, cost) end
+--- @param group_cost number The cost of the group this vehicle belongs to.
+--- @param group_id number The ID of the group this vehicle belongs to
+function onVehicleSpawn(vehicle_id, peer_id, x, y, z, group_cost, group_id) end
+
+--- Called when a group is spawned.
+--- @param group_id number The group_cost ID of the group that was spawned.
+--- @param peer_id number The peer ID of the player who spawned the group, -1 if spawned by the server.
+--- @param x number The x coordinate of the group's spawn location relative to world space.
+--- @param y number The y coordinate of the group's spawn location relative to world space.
+--- @param z number The z coordinate of the group's spawn location relative to world space.
+--- @param group_cost number The cost of the group
+function onGroupSpawn(group_id, peer_id, x, y, z, group_cost) end
 
 --- Called when a vehicle is despawned.
 --- @param vehicle_id number the vehicle ID of the vehicle that was despawned.
@@ -307,7 +343,7 @@ function onForestFireSpawned(fire_objective_id, fire_x, fire_y, fire_z) end
 --- @param fire_x number The x coordinate of the forest fire which was extinguished in world space.
 --- @param fire_y number The y coordinate of the forest fire which was extinguished in world space.
 --- @param fire_z number The z coordinate of the forest fire which was extinguished in world space.
-function onForestFireExtinguised(fire_objective_id, fire_x, fire_y, fire_z) end
+function onForestFireExtinguished(fire_objective_id, fire_x, fire_y, fire_z) end
 
 --- Called when a Tornado is spawned.
 --- @param transform SWMatrix Where the Tornado was spawned.
@@ -458,41 +494,41 @@ function onOilSpill(tile_x, tile_z, delta, total, vehicle_id) end
 
 
 ---@class SWGameSettingEnum : string
----@field third_person  string, 
----@field third_person_vehicle  string, 
----@field vehicle_damage    string, 
----@field player_damage     string, 
----@field npc_damage    string, 
----@field sharks    string, 
----@field fast_travel   string, 
----@field teleport_vehicle  string, 
----@field rogue_mode    string, 
----@field auto_refuel   string, 
----@field megalodon     string, 
----@field map_show_players  string, 
----@field map_show_vehicles     string, 
----@field show_3d_waypoints     string, 
----@field show_name_plates  string, 
+---@field third_person  string,
+---@field third_person_vehicle  string,
+---@field vehicle_damage    string,
+---@field player_damage     string,
+---@field npc_damage    string,
+---@field sharks    string,
+---@field fast_travel   string,
+---@field teleport_vehicle  string,
+---@field rogue_mode    string,
+---@field auto_refuel   string,
+---@field megalodon     string,
+---@field map_show_players  string,
+---@field map_show_vehicles     string,
+---@field show_3d_waypoints     string,
+---@field show_name_plates  string,
 ---@field day_night_length  string,  -- currently cannot be written to
 ---@field sunrise   string,  -- currently cannot be written to
 ---@field sunset    string,  -- currently cannot be written to
----@field infinite_money    string, 
----@field settings_menu     string, 
----@field unlock_all_islands    string, 
----@field infinite_batteries    string, 
----@field infinite_fuel     string, 
----@field engine_overheating    string, 
----@field no_clip   string, 
----@field map_teleport  string, 
----@field cleanup_vehicle   string, 
+---@field infinite_money    string,
+---@field settings_menu     string,
+---@field unlock_all_islands    string,
+---@field infinite_batteries    string,
+---@field infinite_fuel     string,
+---@field engine_overheating    string,
+---@field no_clip   string,
+---@field map_teleport  string,
+---@field cleanup_vehicle   string,
 ---@field clear_fow     string,  -- clear fog of war
----@field vehicle_spawning  string, 
----@field photo_mode    string, 
----@field respawning    string, 
----@field settings_menu_lock    string, 
+---@field vehicle_spawning  string,
+---@field photo_mode    string,
+---@field respawning    string,
+---@field settings_menu_lock    string,
 ---@field despawn_on_leave  string,  -- despawn player characters when they leave a server
----@field unlock_all_components     string, 
----@field override_weather  string, 
+---@field unlock_all_components     string,
+---@field override_weather  string,
 
 --------------------------------------------------------------------------------
 -- ADDON
@@ -521,8 +557,8 @@ function onOilSpill(tile_x, tile_z, delta, total, vehicle_id) end
 
 --- @class SWAddonData
 --- @field name             string The name of the addon
---- @field path_id          string 
---- @field file_store       string 
+--- @field path_id          string
+--- @field file_store       string
 --- @field location_count   number The number of locations in the addon
 
 --- @class SWLocationData
@@ -542,7 +578,7 @@ function onOilSpill(tile_x, tile_z, delta, total, vehicle_id) end
 --- @field id                               number The ID of the component from the missions editor e.g. ID_27
 --- @field dynamic_object_type              SWObjectTypeEnum The object type of the component (number for pan/character/pot/whatever)
 --- @field transform                        SWMatrix The position of the component
---- @field vehicle_parent_component_id      number 
+--- @field vehicle_parent_component_id      number
 --- @field character_outfit_type            number The character outfit type (See Outfit type)
 
 --- @class SWAddonComponentSpawned
@@ -552,6 +588,9 @@ function onOilSpill(tile_x, tile_z, delta, total, vehicle_id) end
 --- @field type                 SWAddonComponentDataTypeEnum The type of the component
 --- @field transform            SWMatrix The location of the component
 --- @field id                   number object_id/vehicle id of spawned item
+--- @field object_id            number The object_id/main_vehicle_id, if this component is an object
+--- @field group_id             number The object_id/group_id, if this component is a group
+--- @field vehicle_ids          table<integer, integer> The IDs of the vehicle belonging to this component if it is a group
 
 --- Get the internal index of an active addon (useful if you want to spawn objects from another script). Omitting the name argument will return this addon's index
 --- @param name string|nil The name of the addon as it appears in xml file. Not the filename
@@ -565,7 +604,7 @@ function server.getAddonIndex(name) end
 function server.getLocationIndex(addon_index, name) end
 
 --- The name of the location as it appears in the addon
---- @param name string 
+--- @param name string
 --- @return boolean is_success
 function server.spawnThisAddonLocation(name) end
 
@@ -573,7 +612,7 @@ function server.spawnThisAddonLocation(name) end
 --- @param name string the name of the location in the current addon
 --- @param matrix SWMatrix? optional param, leaving blank will result in it spawning at the first tile of the location type, matrix in global space.
 --- @return number location_index the index of the location which was spawned.
---- @return boolean is_success true if it successfully spawned the location, false if it failed 
+--- @return boolean is_success true if it successfully spawned the location, false if it failed
 function server.spawnNamedAddonLocation(name, matrix) end
 
 --- Spawn a mission location at the given matrix
@@ -640,9 +679,9 @@ function server.spawnAddonComponent(matrix, addon_index, location_index, compone
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- UI
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 ---@alias SWLabelTypeEnum
 ---| 0 # none
@@ -701,10 +740,6 @@ function server.spawnAddonComponent(matrix, addon_index, location_index, compone
 ---| 9 star
 ---| 10 network_disconnect_critical
 ---| 11 science_flask
----| 12 blank_white
-
--- defined like this so the user will get a warning when just trying to use raw numbers. as using raw numbers will break other addons that are trying to use the map.
----@class SWUI_ID
 
 --- Messages player(s) using the in-game chat
 --- @param name string The display name of the user sending the message
@@ -725,21 +760,21 @@ function server.command(message) end
 function server.notify(peerID, title, message, notificationType) end
 
 --- Gets a unique ID to be used with other UI functions. Functions similar to a vehicle ID. A UI id can be used for multiple lines and map objects but each popup with a different text or position must have it's own ID
---- @return SWUI_ID ui_id
+--- @return integer ui_id
 function server.getMapID() end
 
 --- Remove any UI type created with this ui_id. If you have drawn multiple lines on the map with one UI id, this command would remove all of them.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The unique ui id to be removed
+--- @param ui_id integer The unique ui id to be removed
 function server.removeMapID(peer_id, ui_id) end
 
---- Add a map marker for the specified peer(s). x, z represent the worldspace location of the marker, since the map is 2D a y coordinate is not required. If POSITION_TYPE is set to 1 or 2 (vehicle or object) then the marker will track the object/vehicle of object_id/vehicle_id and offset the position by parent_local_x, parent_local_z. 
+--- Add a map marker for the specified peer(s). x, z represent the worldspace location of the marker, since the map is 2D a y coordinate is not required. If POSITION_TYPE is set to 1 or 2 (vehicle or object) then the marker will track the object/vehicle of object_id/vehicle_id and offset the position by parent_local_x, parent_local_z.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The unique ui id to use
+--- @param ui_id integer The unique ui id to use
 --- @param position_type SWPositionTypeEnum number, Defines what type (object/vehicle) the marker should follow. Or if it should not follow anything. If the vehicle/object that object is set to follow cannot be found, this defaults to 0 meaning it becomes static, when the vehicle/object is reloacated, it reverts back to the previous value.
 --- @param marker_type SWMarkerTypeEnum number
 --- @param x number Refer to World Space. Overrides parent_local_x
---- @param z number Refer to World Space. Overrrides parent_local_z 
+--- @param z number Refer to World Space. Overrrides parent_local_z
 --- @param parent_local_x number The x offset relative to the parent. Refer to World Space
 --- @param parent_local_z number The y offset relative to the parent. Refer to World Space
 --- @param vehicle_id number The vehicle to follow if POSITION_TYPE is set to 1. Set to 0 to ignore
@@ -755,12 +790,12 @@ function server.addMapObject(peer_id, ui_id, position_type, marker_type, x, z, p
 
 --- Removes the map objects with the specified ui_id for the specified peer(s)
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The unique ui id to use
+--- @param ui_id integer The unique ui id to use
 function server.removeMapObject(peer_id, ui_id) end
 
 --- Adds a map label for the specified peer(s). Map labels appear under fog of war.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The unique ui id to use
+--- @param ui_id integer The unique ui id to use
 --- @param LABEL_TYPE SWLabelTypeEnum number
 --- @param name string The text that appears on the label
 --- @param x number Refer to World Space
@@ -769,12 +804,12 @@ function server.addMapLabel(peer_id, ui_id, LABEL_TYPE, name, x, z) end
 
 --- Removes a map label with the specified ui_id for the specified peer(s)
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The ui id to use
+--- @param ui_id integer The ui id to use
 function server.removeMapLabel(peer_id, ui_id) end
 
 --- Adds a map line between two world space matrices with the specified ui_id for the specified pee(s). Custom colour defaults to red.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The ui id to use
+--- @param ui_id integer The ui id to use
 --- @param start_matrix SWMatrix Line start position. worldspace
 --- @param end_matrix SWMatrix Line stop position
 --- @param width number Line width
@@ -786,12 +821,12 @@ function server.addMapLine(peer_id, ui_id, start_matrix, end_matrix, width, r, g
 
 --- Removes a map line with the specified ui_id for the specified peer(s)
 --- @param peer_id number The peer id of the affected player
---- @param ui_id SWUI_ID The ui id to use
+--- @param ui_id integer The ui id to use
 function server.removeMapLine(peer_id, ui_id) end
 
 --- Displays a tooltip-like popup either in the world. If the popup does not exist, it will be created.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID A unique ui_id to be used with this popup. You cannot re-use ui ids for popups, unless they have the same text and position, then they can be used for multiple players.
+--- @param ui_id integer A unique ui_id to be used with this popup. You cannot re-use ui ids for popups, unless they have the same text and position, then they can be used for multiple players.
 --- @param name string ? Appears to do nothing. Can be left as an empty string: ""
 --- @param is_show boolean If the popup is currently being shown
 --- @param text string The text inside the popup. You can fit 13 characters in a line before it will wrap.
@@ -805,7 +840,7 @@ function server.setPopup(peer_id, ui_id, name, is_show, text, x, y, z, render_di
 
 --- Creates a popup that appears on the player's screen, regardless of their look direction and location in the world.
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID A unique ui_id to be used with this popup. You cannot re-use ui ids for popups. One ui id per popup.
+--- @param ui_id integer A unique ui_id to be used with this popup. You cannot re-use ui ids for popups. One ui id per popup.
 --- @param name string ?
 --- @param is_show boolean If the popup is currently being shown
 --- @param text string The text inside the popup. You can fit 13 characters in a line before it will wrap.
@@ -815,7 +850,7 @@ function server.setPopupScreen(peer_id, ui_id, name, is_show, text, horizontal_o
 
 --- Will remove popups that have been assigned to a player
 --- @param peer_id number The peer id of the affected player. -1 affects all players
---- @param ui_id SWUI_ID The unique ui id to use
+--- @param ui_id integer The unique ui id to use
 function server.removePopup(peer_id, ui_id) end
 
 
@@ -828,9 +863,9 @@ function server.removePopup(peer_id, ui_id) end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- Objects
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- @class SWPlayer
 --- @field id number The peer ID of the player (as seen in the server player list)
@@ -1018,7 +1053,7 @@ function server.setCreatureTooltip(object_id, display_name) end
 --- Set the equipment a character has
 --- @param object_id number The unique id of the character
 --- @param slot SWSlotNumberEnum number
---- @param EQUIPMENT_ID SWEquipmentTypeEnum number 
+--- @param EQUIPMENT_ID SWEquipmentTypeEnum number
 --- @param is_active boolean Activates equipment such as strobe lights and fire exstinguishers.
 --- @param integer_value number|nil Depending on the item, sets the integer value (charges, ammo, channel, etc.)
 --- @param float_value number|nil Depending on the item, sets the float value (ammo, battery, etc.)
@@ -1066,7 +1101,7 @@ function server.getCharacterItem(object_id, SLOT_NUMBER) end
 ---| 10 # cow_highland
 ---| 11 # cow_holstein
 ---| 12 # sasquatch
----| 13 # yeti 
+---| 13 # yeti
 ---| 14 # deer_red_f
 ---| 15 # deer_red_m
 ---| 16 # deer_sika_f
@@ -1160,15 +1195,15 @@ function server.getCharacterItem(object_id, SLOT_NUMBER) end
 ---| 104 # tortise_desert
 
 ---@alias SWSlotNumberEnum
----| 1 # Large_Equipment_Slot 
----| 2 # Small_Equipment_Slot 
----| 3 # Small_Equipment_Slot 
----| 4 # Small_Equipment_Slot 
+---| 1 # Large_Equipment_Slot
+---| 2 # Small_Equipment_Slot
+---| 3 # Small_Equipment_Slot
+---| 4 # Small_Equipment_Slot
 ---| 5 # Small_Equipment_Slot
----| 6 # Small_Equipment_Slot 
----| 7 # Small_Equipment_Slot 
----| 8 # Small_Equipment_Slot 
----| 9 # Small_Equipment_Slot 
+---| 6 # Small_Equipment_Slot
+---| 7 # Small_Equipment_Slot
+---| 8 # Small_Equipment_Slot
+---| 9 # Small_Equipment_Slot
 ---| 10 # Outfit_Slot
 
 
@@ -1256,9 +1291,9 @@ function server.getCharacterItem(object_id, SLOT_NUMBER) end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- Vehicles
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- @class SWVoxelPos the voxel position of the component (as set in the editor, is not updated with its current position in game)
 --- @field x number voxel_x position
@@ -1324,19 +1359,19 @@ function server.getCharacterItem(object_id, SLOT_NUMBER) end
 --- @field hoppers table<integer, SWVehicleHopperData>
 --- @field guns table<integer, SWVehicleWeaponData>
 --- @field rope_hooks table<integer, SWVehicleRopeHookData>
+--- @field mass number The mass of the vehicle
+--- @field voxels number The voxel count of the vehicle
+--- @field characters table<integer, integer> The IDs of characters sitting in this vehicle
 
 --- @class SWVehicleData
 --- @field tags_full string The tags as a string (ex. "tag1,tag2,tag3")
 --- @field tags table<number, string> The tags of the vehicle
---- @field filename string The file name of the vehicle
+--- @field group_id integer The ID of the group this vehicle belongs to
 --- @field transform SWMatrix The position of the vehicle
 --- @field simulating boolean Whether the vehicle is simulating (loaded) or not
---- @field mass number The mass of the vehicle
---- @field voxels number The voxel count of the vehicle
 --- @field editable boolean Is the vehicle editable at workbenches
 --- @field invulnerable boolean Is the vehicle invulnerable
 --- @field static boolean Is the vehicle static
---- @field components SWVehicleComponents the vehicle's components
 
 ---@alias SWRopeTypeEnum
 ---| 0 # rope
@@ -1348,13 +1383,13 @@ function server.getCharacterItem(object_id, SLOT_NUMBER) end
 --- @param matrix SWMatrix The matrix the vehicle should be spawned at
 --- @param addon_index number The index of the addon as it is found in the missions folder. There is no set order and it may not be the same next execution.
 --- @param component_id number NOT THE COMPONENT_INDEX. The component_id can be found using getLocationComponentData
---- @return number vehicle_id, boolean is_success
+--- @return number group_id, boolean is_success, table<integer, integer> vehicle_ids
 function server.spawnAddonVehicle(matrix, addon_index, component_id) end
 
 --- Spawns a vehicle from your vehicle save folder. NOTE: will spawn an "empty" vehicle if a vehicle file cannot be found. It is impossible to distinguish from an actual vehicle server-wise. BUG REPORT
 --- @param matrix SWMatrix The matrix the vehicle should be spawned at
 --- @param save_name string The name of the save file to spawn
---- @return number vehicle_id, boolean is_success
+--- @return number group_id, boolean is_success, table<integer, integer> vehicle_ids
 function server.spawnVehicle(matrix, save_name) end
 
 --- Despawns a vehicle from the world
@@ -1371,24 +1406,20 @@ function server.despawnVehicle(vehicle_id, is_instant) end
 --- @return SWMatrix matrix, boolean is_success
 function server.getVehiclePos(vehicle_id, voxel_x, voxel_y, voxel_z) end
 
---- Teleports a vehicle from it's current location to the new matrix
+--- Teleports a vehicle from it's current locaiton to the new matrix
 --- @param vehicle_id number The unique id of the vehicle
 --- @param matrix SWMatrix The matrix to be applied to the vehicle
 function server.setVehiclePos(vehicle_id, matrix) end
 
---- Teleports a vehicle from it's current location to the new matrix. The vehicle is displaced by other vehicles at the arrival point
+--- Teleports a vehicle from it's current locaiton to the new matrix. The vehicle is displaced by other vehicles at the arrival point
 --- @param vehicle_id number The unique id of the vehicle
 --- @param matrix SWMatrix The matrix to be applied to the vehicle
+--- @return boolean is_success, SWMatrix result_matrix
 function server.setVehiclePosSafe(vehicle_id, matrix) end
 
 --- Reloads the vehicle as if spawning from a workbench - refreshing damage and inventories etc.
 --- @param vehicle_id number The unique id of the vehicle
 function server.resetVehicleState(vehicle_id) end
-
---- Returns the name of the vehicle
---- @param vehicle_id number The unique id of the vehicle
---- @return string name, boolean is_success
-function server.getVehicleName(vehicle_id) end
 
 --- Removes all vehicles from the world
 function server.cleanVehicles() end
@@ -1396,10 +1427,67 @@ function server.cleanVehicles() end
 --- Cleans up fallout zones
 function server.clearRadiation() end
 
---- Returns a vehicle's data (Recommended to use as little as possible, as it can cause massive performance issues, taking up to 12.8ms on some vehicles)
+--- Returns a vehicle's data
 --- @param vehicle_id number The unique id of the vehicle
 --- @return SWVehicleData vehicle_data, boolean is_success
 function server.getVehicleData(vehicle_id) end
+
+--- Returns a vehicle's components
+--- @param vehicle_id number The unique id of the vehicle
+--- @return SWVehicleComponents vehicle_components, boolean is_success
+function server.getVehicleComponents(vehicle_id) end
+
+--- Returns a table of vehicle IDs that belong to the specified group
+--- @param group_id number The unique id of the group
+--- @return table<integer, integer> vehicle_ids
+function server.getVehicleGroup(group_id) end
+
+--- Despawns all vehicles belonging to the specified group
+--- @param group_id number The unique id of the group
+--- @param is_instant boolean If the group should be despawned instantly (true) or when no one is near (false)
+--- @return boolean is_success
+function server.despawnVehicleGroup(group_id, is_instant) end
+
+--- Teleports a group
+--- @param group_id number The unique id of the group
+--- @param transform_matrix SWMatrix The position to teleport the group to
+--- @return boolean is_success
+function server.setGroupPos(group_id, transform_matrix) end
+
+--- Move a group. Doesn't unload then load the group vehicles
+--- @param group_id number The unique id of the group
+--- @param transform_matrix SWMatrix The position to move the group to
+--- @return boolean is_success
+function server.moveGroup(group_id, transform_matrix) end
+
+--- Moves a group, displacing the target position if a vehicle is blocking the destination
+--- @param group_id number The unique id of the group
+--- @param transform_matrix SWMatrix The position to move the group to
+--- @return boolean is_success, SWMatrix result_matrix
+function server.moveGroupSafe(group_id, transform_matrix) end
+
+--- Move a vehicle. Doesn't unload then load the vehicle
+--- @param vehicle_id number The unique id of the vehicle
+--- @param transform_matrix SWMatrix The position to move the vehicle to
+--- @return boolean is_success
+function server.moveVehicle(vehicle_id, transform_matrix) end
+
+--- Moves a vehicle, displacing the target position if a vehicle is blocking the destination
+--- @param vehicle_id number The unique id of the vehicle
+--- @param transform_matrix SWMatrix The position to move the vehicle to
+--- @return boolean is_success, SWMatrix result_matrix
+function server.moveVehicleSafe(vehicle_id, transform_matrix) end
+
+--- Teleports a group, displacing the target position if a vehicle is blocking the destination
+--- @param group_id number The unique id of the group
+--- @param transform_matrix SWMatrix The position to teleport the group to
+--- @return boolean is_success, SWMatrix result_matrix
+function server.setGroupPosSafe(group_id, transform_matrix) end
+
+--- Converts a world transform to an astronomy transform. Useful for navigating in space
+--- @param transform_matrix SWMatrix
+---@return SWMatrix
+function server.getAstroPos(transform_matrix) end
 
 --- Returns the tank data
 --- @overload fun(vehicle_id: number, voxel_x: number, voxel_y: number, voxel_z: number)
@@ -1562,7 +1650,7 @@ function server.setVehicleTooltip(vehicle_id, text) end
 --- @return boolean is_success
 function server.addDamage(vehicle_id, amount, voxel_x, voxel_y, voxel_z, radius) end
 
---- Returns whether the specified vehicle has finished loading and is simulating. 
+--- Returns whether the specified vehicle has finished loading and is simulating.
 --- @param vehicle_id number The unique id of the vehicle
 --- @return boolean is_simulating, boolean is_success
 function server.getVehicleSimulating(vehicle_id) end
@@ -1611,9 +1699,9 @@ function server.setVehicleShowOnMap(vehicle_id, is_show_on_map) end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- AI
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- @class SWTileData
 --- @field name string The name of the tile (ex. ...)
@@ -1666,45 +1754,45 @@ function server.setAITargetVehicle(object_id, target_vehicle_id) end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- GAME
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 --- @class SWGameSettings
---- @field third_person             boolean 
---- @field third_person_vehicle     boolean 
---- @field vehicle_damage           boolean 
---- @field player_damage            boolean 
---- @field npc_damage               boolean 
---- @field sharks                   boolean 
---- @field fast_travel              boolean 
---- @field teleport_vehicle         boolean 
---- @field rogue_mode               boolean 
---- @field auto_refuel              boolean 
---- @field megalodon                boolean 
---- @field map_show_players         boolean 
---- @field map_show_vehicles        boolean 
---- @field show_3d_waypoints        boolean 
---- @field show_name_plates         boolean 
+--- @field third_person             boolean
+--- @field third_person_vehicle     boolean
+--- @field vehicle_damage           boolean
+--- @field player_damage            boolean
+--- @field npc_damage               boolean
+--- @field sharks                   boolean
+--- @field fast_travel              boolean
+--- @field teleport_vehicle         boolean
+--- @field rogue_mode               boolean
+--- @field auto_refuel              boolean
+--- @field megalodon                boolean
+--- @field map_show_players         boolean
+--- @field map_show_vehicles        boolean
+--- @field show_3d_waypoints        boolean
+--- @field show_name_plates         boolean
 --- @field day_night_length         number currently cannot be written to
 --- @field sunrise                  number currently cannot be written to
 --- @field sunset                   number currently cannot be written to
---- @field infinite_money           boolean 
---- @field settings_menu            boolean 
---- @field unlock_all_islands       boolean 
---- @field infinite_batteries       boolean 
---- @field infinite_fuel            boolean 
---- @field engine_overheating       boolean 
---- @field no_clip                  boolean 
---- @field map_teleport             boolean 
---- @field cleanup_vehicle          boolean 
+--- @field infinite_money           boolean
+--- @field settings_menu            boolean
+--- @field unlock_all_islands       boolean
+--- @field infinite_batteries       boolean
+--- @field infinite_fuel            boolean
+--- @field engine_overheating       boolean
+--- @field no_clip                  boolean
+--- @field map_teleport             boolean
+--- @field cleanup_vehicle          boolean
 --- @field clear_fow                boolean make entire map visible. cannot be undone
 --- @field vehicle_spawning         boolean off by default on dedicated servers
---- @field photo_mode               boolean 
---- @field respawning               boolean 
+--- @field photo_mode               boolean
+--- @field respawning               boolean
 --- @field settings_menu_lock       boolean Checkbox (un)checks properly for all players but players can still edit the settings regardless of the state set here.
 --- @field despawn_on_leave         boolean despawn players when they leave the server
---- @field unlock_all_components    boolean 
+--- @field unlock_all_components    boolean
 --- @field override_weather         boolean
 
 --- @class SWVolcano
@@ -1749,12 +1837,12 @@ function server.setAITargetVehicle(object_id, target_vehicle_id) end
 
 --- @param transform_matrix SWMatrix
 --- @param magnitude number magnitude 0->1
---- @return boolean is_success 
+--- @return boolean is_success
 function server.spawnTsunami(transform_matrix, magnitude) end
 
 --- @param transform_matrix SWMatrix
 --- @param magnitude number magnitude 0->1
---- @return boolean is_success 
+--- @return boolean is_success
 function server.spawnWhirlpool(transform_matrix, magnitude) end
 
 --- Cancels the current gerstner wave even (tsunami or whirlpool)
@@ -1762,20 +1850,20 @@ function server.cancelGerstner() end
 
 --- @param transform_matrix SWMatrix
 --- @param magnitude number magnitude 0->1
---- @return boolean is_success 
+--- @return boolean is_success
 function server.spawnTornado(transform_matrix, magnitude) end
 
 --- @param transform_matrix SWMatrix
 --- @param magnitude number magnitude 0->1
---- @return boolean is_success 
+--- @return boolean is_success
 function server.spawnMeteor(transform_matrix, magnitude) end
 
 --- @param transform_matrix SWMatrix
 --- @param magnitude number magnitude 0->1
---- @return boolean is_success 
+--- @return boolean is_success
 function server.spawnVolcano(transform_matrix, magnitude) end
 
---- @return table<number, SWVolcano> volcanos 
+--- @return table<number, SWVolcano> volcanos
 function server.getVolcanos() end
 
 --- Gets the blended oil amount at the target location.
@@ -1896,9 +1984,9 @@ function server.setTileInventory(matrix, coal, uranium, diesel, jet_fuel) end
 --- Returns whether the object transform is within a custom zone of the selected size
 --- @param matrix_object SWMatrix The matrix of the object
 --- @param matrix_zone SWMatrix The matrix of the zone to search within
---- @param zone_size_x number The size of the zone. Refer to World Space 
---- @param zone_size_y number The size of the zone. Refer to World Space 
---- @param zone_size_z number The size of the zone. Refer to World Space 
+--- @param zone_size_x number The size of the zone. Refer to World Space
+--- @param zone_size_y number The size of the zone. Refer to World Space
+--- @param zone_size_z number The size of the zone. Refer to World Space
 --- @return boolean is_in_area
 function server.isInTransformArea(matrix_object, matrix_zone, zone_size_x, zone_size_y, zone_size_z) end
 
@@ -1911,7 +1999,7 @@ function server.isInTransformArea(matrix_object, matrix_zone, zone_size_x, zone_
 function server.pathfind(matrix_start, matrix_end, required_tags, avoided_tags) end
 
 --- Returns a table of waypoints tagged with ocean_path, that form a path from start to end. This functions the same as passing "ocean_path" as a required tag to server.pathfind().
---- @param matrix_start SWMatrix The starting point of the path. World Space 
+--- @param matrix_start SWMatrix The starting point of the path. World Space
 --- @param matrix_end SWMatrix The ending point of the path. World Space
 --- @return table<number, SWPathFindPoint> position_list
 function server.pathfindOcean(matrix_start, matrix_end) end
@@ -1928,9 +2016,9 @@ function server.getOilDeposits() end
 
 
 
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 -- MISC
----------------------------------------------------------------------------------------------------------------------
+-------------------------
 
 ---@alias SWEventIDEnum
 ---| 0 # NONE
