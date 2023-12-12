@@ -3,6 +3,7 @@ const os = require("os");
 
 // Minify the content by removing comments and extra whitespace
 function minify(content) {
+	content = content.replace(/--\[\[([\s\S]*?)\]\]/g, ""); // removes another type of lua comment ("--[[comment]]")
 	content = content.replace(/--.*/g, "");
 	content = content.replace(/^\s*[\r\n]/gm, "");
 	content = content.replace(/\s+/g, " ");
