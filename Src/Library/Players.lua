@@ -9,7 +9,6 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         vehicles = {},
 
         AddVehicle = function(self, vehicle)
-            print("spawned vehicle")
             self.vehicles[vehicle.groupID] = vehicle
         end,
 
@@ -42,11 +41,11 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         end,
 
         GetPos = function(self)
-            return server.getPlayerCharacterPos(self.peerID)
+            return server.getPlayerPos(self.peerID)
         end,
 
         SetPos = function(self, newMatrix)
-            server.setPlayerCharacterPos(self.peerID, newMatrix)
+            server.setPlayerPos(self.peerID, newMatrix)
         end,
     }
 
