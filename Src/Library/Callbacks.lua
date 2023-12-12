@@ -1,164 +1,164 @@
 ---@diagnostic disable: lowercase-global
 function onTick(...)
-    Util.Events.Envoke("onTick", ...)
+    Util.Events.Invoke("onTick", ...)
 end
 
 function onCreate(...)
-    Util.Events.Envoke("onCreate", ...)
+    Util.Events.Invoke("onCreate", ...)
 end
 
 function onDestroy(...)
-    Util.Events.Envoke("onDestroy", ...)
+    Util.Events.Invoke("onDestroy", ...)
 end
 
 function onCustomCommand(...)
-    Util.Events.Envoke("onCustomCommand", ...)
+    Util.Events.Invoke("onCustomCommand", ...)
 end
 
 function onChatMessage(...)
-    Util.Events.Envoke("onChatMessage", ...)
+    Util.Events.Invoke("onChatMessage", ...)
 end
 
 function onPlayerJoin(...)
-    Util.Events.Envoke("onPlayerJoin", ...)
+    Util.Events.Invoke("onPlayerJoin", ...)
 end
 
 function onPlayerSit(...)
-    Util.Events.Envoke("onPlayerSit", ...)
+    Util.Events.Invoke("onPlayerSit", ...)
 end
 
 function onPlayerUnsit(...)
-    Util.Events.Envoke("onPlayerUnsit", ...)
+    Util.Events.Invoke("onPlayerUnsit", ...)
 end
 
 function onCharacterSit(...)
-    Util.Events.Envoke("onCharacterSit", ...)
+    Util.Events.Invoke("onCharacterSit", ...)
 end
 
 function onCharacterUnsit(...)
-    Util.Events.Envoke("onCharacterUnsit", ...)
+    Util.Events.Invoke("onCharacterUnsit", ...)
 end
 
 function onCharacterPickup(...)
-    Util.Events.Envoke("onCharacterPickup", ...)
+    Util.Events.Invoke("onCharacterPickup", ...)
 end
 
 function onCreatureSit(...)
-    Util.Events.Envoke("onCreatureSit", ...)
+    Util.Events.Invoke("onCreatureSit", ...)
 end
 
 function onCreatureUnsit(...)
-    Util.Events.Envoke("onCreatureUnsit", ...)
+    Util.Events.Invoke("onCreatureUnsit", ...)
 end
 
 function onCreaturePickup(...)
-    Util.Events.Envoke("onCreaturePickup", ...)
+    Util.Events.Invoke("onCreaturePickup", ...)
 end
 
 function onEquipmentPickup(...)
-    Util.Events.Envoke("onEquipmentPickup", ...)
+    Util.Events.Invoke("onEquipmentPickup", ...)
 end
 
 function onEquipmentDrop(...)
-    Util.Events.Envoke("onEquipmentDrop", ...)
+    Util.Events.Invoke("onEquipmentDrop", ...)
 end
 
 function onPlayerRespawn(...)
-    Util.Events.Envoke("onPlayerRespawn", ...)
+    Util.Events.Invoke("onPlayerRespawn", ...)
 end
 
 function onPlayerLeave(...)
-    Util.Events.Envoke("onPlayerLeave", ...)
+    Util.Events.Invoke("onPlayerLeave", ...)
 end
 
 function onToggleMap(...)
-    Util.Events.Envoke("onToggleMap", ...)
+    Util.Events.Invoke("onToggleMap", ...)
 end
 
 function onPlayerDie(...)
-    Util.Events.Envoke("onPlayerDie", ...)
+    Util.Events.Invoke("onPlayerDie", ...)
 end
 
 function onGroupSpawn(...)
-    Util.Events.Envoke("onGroupSpawn", ...)
+    Util.Events.Invoke("onGroupSpawn", ...)
 end
 
 function onVehicleSpawn(...)
-    Util.Events.Envoke("onVehicleSpawn", ...)
+    Util.Events.Invoke("onVehicleSpawn", ...)
 end
 
 function onVehicleDespawn(...)
-    Util.Events.Envoke("onVehicleDespawn", ...)
+    Util.Events.Invoke("onVehicleDespawn", ...)
 end
 
 function onVehicleLoad(...)
-    Util.Events.Envoke("onVehicleLoad", ...)
+    Util.Events.Invoke("onVehicleLoad", ...)
 end
 
 function onVehicleUnload(...)
-    Util.Events.Envoke("onVehicleUnload", ...)
+    Util.Events.Invoke("onVehicleUnload", ...)
 end
 
 function onVehicleTeleport(...)
-    Util.Events.Envoke("onVehicleTeleport", ...)
+    Util.Events.Invoke("onVehicleTeleport", ...)
 end
 
 function onObjectLoad(...)
-    Util.Events.Envoke("onObjectLoad", ...)
+    Util.Events.Invoke("onObjectLoad", ...)
 end
 
 function onObjectUnload(...)
-    Util.Events.Envoke("onObjectUnload", ...)
+    Util.Events.Invoke("onObjectUnload", ...)
 end
 
 function onButtonPress(...)
-    Util.Events.Envoke("onButtonPress", ...)
+    Util.Events.Invoke("onButtonPress", ...)
 end
 
 function onSpawnAddonComponent(...)
-    Util.Events.Envoke("onSpawnAddonComponent", ...)
+    Util.Events.Invoke("onSpawnAddonComponent", ...)
 end
 
 function onVehicleDamaged(...)
-    Util.Events.Envoke("onVehicleDamaged", ...)
+    Util.Events.Invoke("onVehicleDamaged", ...)
 end
 
 function httpReply(...)
-    Util.Events.Envoke("httpReply", ...)
+    Util.Events.Invoke("httpReply", ...)
 end
 
 function onFireExtinguished(...)
-    Util.Events.Envoke("onFireExtinguished", ...)
+    Util.Events.Invoke("onFireExtinguished", ...)
 end
 
 function onForestFireSpawned(...)
-    Util.Events.Envoke("onForestFireSpawned", ...)
+    Util.Events.Invoke("onForestFireSpawned", ...)
 end
 
 function onForestFireExtinguished(...)
-    Util.Events.Envoke("onForestFireExtinguished", ...)
+    Util.Events.Invoke("onForestFireExtinguished", ...)
 end
 
 function onTornado(...)
-    Util.Events.Envoke("onTornado", ...)
+    Util.Events.Invoke("onTornado", ...)
 end
 
 function onMeteor(...)
-    Util.Events.Envoke("onMeteor", ...)
+    Util.Events.Invoke("onMeteor", ...)
 end
 
 function onTsunami(...)
-    Util.Events.Envoke("onTsunami", ...)
+    Util.Events.Invoke("onTsunami", ...)
 end
 
 function onWhirlpool(...)
-    Util.Events.Envoke("onWhirlpool", ...)
+    Util.Events.Invoke("onWhirlpool", ...)
 end
 
 function onVolcano(...)
-    Util.Events.Envoke("onVolcano", ...)
+    Util.Events.Invoke("onVolcano", ...)
 end
 
 function onOilSpill(...)
-    Util.Events.Envoke("onOilSpill", ...)
+    Util.Events.Invoke("onOilSpill", ...)
 end

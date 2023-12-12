@@ -10,13 +10,13 @@ function Util.Events.Create(name)
     print("Created Event: " .. name)
 end
 
-function Util.Events.Envoke(name, ...)
+function Util.Events.Invoke(name, ...)
     -- If Event doesn't exist, create it
     if not Util.Events[name] then
         Util.Events.Create(name)
     end
 
-    -- Envoke Events
+    -- Invoke Events
     for _, callback in pairs(Util.Events[name]) do
         callback(...)
     end
