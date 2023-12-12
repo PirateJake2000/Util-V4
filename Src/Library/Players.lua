@@ -6,19 +6,19 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         objectID = server.getPlayerCharacterID(peer_id),
         isAdmin = is_admin,
         isAuth = is_auth,
-        vehicle = nil,
+        vehicles = {},
 
         AddVehicle = function(self, vehicle)
             print("spawned vehicle")
-            self.vehicle = vehicle
+            self.vehicles[vehicle.groupID] = vehicle
         end,
 
-        RemoveVehicle = function(self)
-            self.vehicle = {}
+        RemoveVehicle = function(self, vehicle)
+            self.vehicles[vehicle.groupID] = nil
         end,
 
-        GetVehicle = function(self)
-            return self.vehicle or error("Player does not have a vehicle")
+        GetVehicles = function(self)
+            return self.vehicles
         end,
 
         Kill = function(self)
