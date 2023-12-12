@@ -42,11 +42,12 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         end,
 
         GetPos = function(self)
-            return server.getPlayerCharacterPos(self.peerID)
+            local m, s = server.getPlayerPos(self.peerID)
+            return m
         end,
 
         SetPos = function(self, newMatrix)
-            server.setPlayerCharacterPos(self.peerID, newMatrix)
+            server.setPlayerPos(self.peerID, newMatrix)
         end,
     }
 

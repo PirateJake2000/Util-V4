@@ -1,94 +1,26 @@
 const fs = require("fs");
 const os = require("os");
+const config = require("../Config.json");
 
-// Minify the content by removing comments and extra whitespace
-function minify(content) {
-	content = content.replace(/--.*/g, "");
-	content = content.replace(/^\s*[\r\n]/gm, "");
-	content = content.replace(/\s+/g, " ");
-	content = content.replace(/Util/g, "u");
+function processFile(file) {
+	let data = fs.readFileSync(file, "utf8");
 
-	return content;
+	if (config.build_removeComments) {
+		data = data.replace(/--.*/g, "");
+		data = data.replace(/--\[\[([\s\S]*?)\]\]/g, "");
+	}
+
+	if (config.build_removeEmptyLines) {
+		data = data.replace(/^\s*[\r\n]/gm, "");
+	}
+
+	if (config.build_removeEmptySpaces) {
+		data = data.replace(/\s+/g, " ");
+	}
+
+	return data;
 }
 
-// Create the Util object by iterating through the files in the "./Src/library" directory
-function createUtil() {
-	const srcPath = "./Src/library";
-	const files = fs.readdirSync(srcPath);
-
-	let util = "local u = {";
-
-	files.forEach((file) => {
-		if (file.endsWith(".lua")) {
-			util += `\n\t${file.slice(0, -4)} = {},`;
-		}
-	});
-
-	util = util.slice(0, -1) + "\n}";
-
-	return minify(util);
-}
-
-// Build the main.lua file by combining the content of all .lua files in the "./Src" directory
-function build() {
-	const files = getAllFiles("./Src");
-	let main = "";
-
-	// Add credits
-	main += "---@diagnostic disable: lowercase-global\n";
-	main += "-- Util v4 \n";
-	main += "-- Jake (PirateJake2000) \n";
-	main += "-- https://github.com/PirateJake2000/Util-V4\n";
-	main += `-- Built: ${new Date().toLocaleString()}`;
-
-	// Add header
-	main += fs.readFileSync("./Src/header.lua", "utf8").replace(/--.*/g, "");
-	main += "\n";
-
-	// Add util
-	main += createUtil();
-	main += "\n\n";
-
-	files.forEach((file) => {
-		if (file == "./Src/Header.lua") return;
-		if (file == "./Src/Footer.lua") return;
-
-		if (file.endsWith(".lua")) {
-			main += `-- ${file}\n`;
-			main += minify(fs.readFileSync(file, "utf8"));
-			main += "\n";
-
-			console.log(`-> ${file}`);
-		}
-	});
-
-	// Add footer
-	main += fs
-		.readFileSync("./Src/footer.lua", "utf8")
-		.replace(/--.*/g, "")
-		.replace(/Util/g, "u");
-
-	fs.writeFileSync("./Out/main.lua", main);
-}
-
-// Recursively get all files in a directory
-function getAllFiles(dirPath, arrayOfFiles) {
-	const files = fs.readdirSync(dirPath);
-
-	arrayOfFiles = arrayOfFiles || [];
-
-	files.forEach((file) => {
-		if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-			arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
-		} else {
-			arrayOfFiles.push(dirPath + "/" + file);
-		}
-	});
-
-	return arrayOfFiles;
-}
-
-// Copy the main.lua file to the Stormworks mission folder for faster testing
 function copyToMission() {
 	const username = os.userInfo().username;
 	const path = `C:/Users/${username}/AppData/Roaming/Stormworks/data/missions/Util v4`;
@@ -103,14 +35,73 @@ function copyToMission() {
 	console.log(`Copied to ${path}`);
 }
 
-console.log(`Build started`);
+function build() {
+	let files = fs.readdirSync("./src/Library");
 
+	let output = "";
+
+	output += "---@diagnostic disable: lowercase-global\n";
+
+	let util = `local Util = {
+		Settings = {
+			name = "${config.serverName}",
+		},`;
+
+	files.forEach((file) => {
+		if (file.endsWith(".lua")) {
+			util += `\n\t${file.slice(0, -4)} = {},`;
+		}
+	});
+
+	output += "\n\n" + util + "\n}\n\n\n";
+
+	for (let i = 0; i < files.length; i++) {
+		file = processFile(`./src/Library/${files[i]}`);
+
+		output += file + "\n";
+	}
+
+	output += "\n\n";
+
+	// Load plugins
+	let plugins = fs.readdirSync("./src/Plugins");
+	let pluginString = "local plugins = {\n";
+
+	for (let i = 0; i < plugins.length; i++) {
+		let plugin = plugins[i];
+		console.log(`Loading plugin ${plugin}`);
+
+		// for each file inside the plugin folder
+		let files = fs.readdirSync(`./src/Plugins/${plugin}`);
+
+		for (let j = 0; j < files.length; j++) {
+			let file = files[j];
+
+			if (file.endsWith(".lua")) {
+				let data = processFile(`./src/Plugins/${plugin}/${file}`);
+
+				// Remove the plugin = text from the file
+				pluginString += data.replace(/local plugin = /g, "") + ",\n";
+			}
+		}
+	}
+
+	output += pluginString + "}\n";
+
+	output += "\n\n" + processFile("./Src/Initialize.lua") + "\n";
+	output += processFile("./Src/Main.lua") + "\n";
+
+	output += "\n\nUtil.Initialize()";
+
+	output = output.replace(/Util/g, "uv4");
+
+	fs.writeFileSync("./Out/main.lua", output);
+}
+
+// Building
+console.log("Building started");
 build();
-
-console.log(
-	`Build finished [${
-		fs.readFileSync("./Out/main.lua", "utf8").length
-	} characters]`
-);
-
 copyToMission();
+console.log(
+	`Build complete [${fs.readFileSync("./Out/main.lua", "utf8").length} chars]`
+);
