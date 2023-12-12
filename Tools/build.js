@@ -43,9 +43,9 @@ function build() {
 	output += "---@diagnostic disable: lowercase-global\n";
 
 	let util = `local Util = {
-		Settings = {
-			name = "${config.serverName}",
-		},`;
+	Settings = {
+		name = "${config.serverName}",
+	},`;
 
 	files.forEach((file) => {
 		if (file.endsWith(".lua")) {

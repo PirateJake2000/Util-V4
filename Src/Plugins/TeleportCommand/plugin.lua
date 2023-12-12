@@ -4,12 +4,8 @@ local plugin = {
     description = "Adds a command to teleport.",
 
     create = function()
-        print("created teleport command plugin")
-
         Util.Commands.Create("teleport", { "?tp" },
             function(full_message, user_peer_id, is_admin, is_auth, args)
-                print(args[1], args[2], args[3])
-
                 local player = Util.Players.Get(Util.Players.getSteamID(user_peer_id))
                 local px, py, pz = matrix.position(player:GetPos())
 
