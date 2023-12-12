@@ -1,0 +1,3 @@
+# ignore folders/files that are generated automatically by running code, or arent needed
+/.vscode
+/Out
