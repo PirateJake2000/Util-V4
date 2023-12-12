@@ -1,6 +1,6 @@
 const fs = require("fs");
 const os = require("os");
-const config = require("../Config.json");
+const config = require("./Config.json");
 
 function processFile(file) {
 	let data = fs.readFileSync(file, "utf8");
@@ -44,7 +44,7 @@ function build() {
 
 	let util = `local Util = {
 	Settings = {
-		name = "${config.serverName}",
+		name = "[Server]",
 	},`;
 
 	files.forEach((file) => {

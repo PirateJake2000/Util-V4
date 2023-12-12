@@ -34,7 +34,7 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         end,
 
         Message = function(self, message)
-            server.announce("[Server]", message, self.peerID)
+            server.announce(Util.Settings.name, message, self.peerID)
         end,
 
         Notify = function(self, title, message, notificationType)

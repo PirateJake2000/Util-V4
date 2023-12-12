@@ -10,7 +10,7 @@ function Util.Initialize()
     Util.Events.Invoke("Util.Initialize", nil)
 
     for i = 1, #plugins do
-        plugins[i].create()
+        plugins[i]:create()
         server.announce(Util.Settings.name, "Loaded plugin: " .. plugins[i].name, -1)
     end
 

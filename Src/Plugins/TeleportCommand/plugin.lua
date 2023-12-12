@@ -2,6 +2,7 @@ local plugin = {
     name = "Teleport Command",
     author = "PirateJake2000",
     description = "Adds a command to teleport.",
+    settings = {},
 
     create = function()
         Util.Commands.Create("teleport", { "?tp" },

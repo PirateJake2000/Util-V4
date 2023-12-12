@@ -1,6 +1,4 @@
 {
-    "serverName" : "[Server]",
-
     "build_removeComments" : true,
     "build_removeEmptyLines" : true,
     "build_removeEmptySpaces" : true
