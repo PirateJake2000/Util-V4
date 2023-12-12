@@ -17,7 +17,7 @@ function createUtil() {
 	const srcPath = "./Src/library";
 	const files = fs.readdirSync(srcPath);
 
-	let util = "local u = {";
+	let util = "";
 
 	files.forEach((file) => {
 		if (file.endsWith(".lua")) {
