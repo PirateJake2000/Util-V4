@@ -1,3 +1,4 @@
+---@param name string
 function Util.Events.Create(name)
     -- If Event already exists, return
     if Util.Events.List[name] then
@@ -10,6 +11,8 @@ function Util.Events.Create(name)
     print("Created Event: " .. name)
 end
 
+---@param name string
+---@param ... any
 function Util.Events.Invoke(name, ...)
     -- If Event doesn't exist, create it
     if not Util.Events.List[name] then
@@ -22,6 +25,8 @@ function Util.Events.Invoke(name, ...)
     end
 end
 
+---@param name string
+---@param callback function
 function Util.Events.Hook(name, callback)
     -- If Event doesn't exist, create it
     if not Util.Events.List[name] then
@@ -32,6 +37,8 @@ function Util.Events.Hook(name, callback)
     table.insert(Util.Events.List[name], callback)
 end
 
+---@param name string
+---@param callback function
 function Util.Events.Unhook(name, callback)
     -- If Event doesn't exist, return
     if not Util.Events.List[name] then
@@ -46,6 +53,7 @@ function Util.Events.Unhook(name, callback)
     end
 end
 
+---@param name string
 function Util.Events.Destroy(name)
     -- If Event doesn't exist, return
     if not Util.Events.List[name] then
