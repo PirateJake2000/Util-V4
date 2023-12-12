@@ -9,7 +9,6 @@ Util.Commands.Create("?reset", { "?reset", "?r" }, function(full_message, user_p
 end)
 
 -- Example despawn command
-Util.Commands.Create("?c", { "?c", "?clean", "?d", "?despawn" },
-    function(full_message, user_peer_id, is_admin, is_auth, args)
-        Util.Players.Get(Util.Players.getSteamID(user_peer_id)):GetVehicle():Despawn()
-    end)
+Util.Commands.Create("?c", { "?c", "?clean", "?d", "?despawn" }, function(full_message, user_peer_id, is_admin, is_auth, args)
+    Util.Players.Get(Util.Players.getSteamID(user_peer_id)):GetVehicle():Despawn()
+end)
