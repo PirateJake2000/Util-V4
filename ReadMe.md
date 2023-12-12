@@ -1,6 +1,13 @@
 ## Information
 
-This is my 4th Lua framework for Stormworks build and rescue addons, mainly designed to run on servers and provide basic functionality for addons. It is also designed to be easy to use and understand, and to be easily expandable.
+> This is my 4th Lua framework for Stormworks build and rescue addons, mainly designed to run on servers and provide basic functionality for addons. It is also designed to be easy to use and understand, and to be easily expandable.
+
+> Util V4 takes a OOP approach to addon Lua for example:
+
+```lua
+local player = Util.Players.Get(Util.Players.getSteamID(peerID)) -- Get the player object using the peerID
+player:GetVehicle():Despawn() -- Despawn the players vehicle
+```
 
 ## Documentation (Files)
 
@@ -15,15 +22,20 @@ This is my 4th Lua framework for Stormworks build and rescue addons, mainly desi
 
 ## Documentation (Framework)
 
-Util V4 takes a OOP approach to addon Lua for example:
-
-```lua
-local player = Util.Players.Get(Util.Players.getSteamID(peerID)) -- Get the player object using the peerID
-player:GetVehicle():Despawn() -- Despawn the players vehicle
-```
-
 ## Building to a file
 
 > I wrote a custom build script (build.js) this script will build the project to a single file, The script will also minify the code and remove any comments,
-> [!important]
+> [!TIP]
 > Header and Footer files will not be minified but comments will still be removed. and Util will be renamed to "u"
+
+> The final built file will be located in the "Out" folder and if it can be found the build script will automatically update the Mission lua file for you.
+
+> [!NOTE]
+> Structure of the Out file:
+
+```
+> Credits
+> Header
+> Main
+> Footer
+```
