@@ -7,16 +7,22 @@
 ---@field vehicles table<integer, UtilVehicle>
 ---
 ---@field AddVehicle fun(self: self, vehicle: UtilVehicle)
----@field RemoveVehicle fun(self: self, vehicle: UtilVehicle)
----@field GetVehicle fun(self: self, vehicle: UtilVehicle)
+---@field RemoveVehicle fun(self: self, vehicle: UtilVehicle
+---@field GetVehicles fun(self: self): table<integer, UtilVehicle>
 ---@field Kill fun(self: self)
 ---@field Revive fun(self: self)
 ---@field SetData fun(self: self, hp: number, is_interactable: boolean, is_ai: boolean)
 ---@field Message fun(self: self, message: string)
 ---@field Notify fun(self: self, title: string, message: string, notificationType: SWNotifiationTypeEnum)
----@field GetPos fun(self: self)
+---@field GetPos fun(self: self): SWMatrix
 ---@field SetPos fun(self: self, newMatrix: SWMatrix)
 
+---@param steam_id integer
+---@param name string
+---@param peer_id integer
+---@param is_admin boolean
+---@param is_auth boolean
+---@return UtilPlayer
 function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
     local player = {
         name = name,
@@ -72,14 +78,17 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
     return player
 end
 
+---@return UtilPlayer|nil
 function Util.Players.Get(steam_id)
     return Util.Players.List[steam_id] or error("Player does not exist")
 end
 
+---@param steam_id integer
 function Util.Players.Destroy(steam_id)
     Util.Players.List[steam_id] = nil
 end
 
+---@param peer_id integer
 function Util.Players.getSteamID(peer_id)
     for steam_id, player in pairs(Util.Players.List) do
         if player.peerID == peer_id then
@@ -88,6 +97,7 @@ function Util.Players.getSteamID(peer_id)
     end
 end
 
+---@param steamID integer
 function Util.Players.getPeerID(steamID)
     for steam_id, player in pairs(Util.Players.List) do
         if steam_id == steamID then
@@ -96,6 +106,11 @@ function Util.Players.getPeerID(steamID)
     end
 end
 
+---@param steam_id integer
+---@param name string
+---@param peer_id integer
+---@param is_admin boolean
+---@param is_auth boolean
 function Util.Players.Leave(steam_id, name, peer_id, is_admin, is_auth)
     if Util.Players.Get(steam_id):GetVehicle() ~= {} then
         Util.Players.Get(steam_id):GetVehicle():DespawnGroup(true)
@@ -104,4 +119,5 @@ function Util.Players.Leave(steam_id, name, peer_id, is_admin, is_auth)
     Util.Players.Destroy(steam_id)
 end
 
+---@type table<integer, UtilPlayer>
 Util.Players.List = {}
