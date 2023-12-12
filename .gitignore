@@ -4,6 +4,3 @@
 # ignore folders/files that are generated automatically by running code, or arent needed
 .vscode
 Out
-
-# ignoring since it isnt needed for the framework itself
-Src/main.lua
