@@ -1,25 +1,25 @@
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onPlayerJoin", Util.Players.Create))
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onPlayerLeave", Util.Players.Destroy))
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onCustomCommand", Util.Commands.Check))
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onTick", Util.Timers.Update))
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onGroupSpawn", Util.Vehicles.Spawn))
-Util.Events.Hook("Util.Initialize", Util.Events.Hook("onPlayerLeave", Util.Players.Leave))
-
 function Util.Initialize()
-    print("Util.Initialize")
     Util.Events.Invoke("Util.Initialize", nil)
 
-    for i = 1, #plugins do
-        plugins[i]:create()
-        server.announce(Util.Settings.name, "Loaded plugin: " .. plugins[i].name, -1)
+    Util.Events.Hook("onTick", Util.Timers.Update)
+    Util.Events.Hook("onPlayerJoin", Util.Players.Create)
+    Util.Events.Hook("onGroupSpawn", Util.Vehicles.Spawn)
+    Util.Events.Hook("onCustomCommand", Util.Commands.Check)
+    Util.Events.Hook("onPlayerLeave", Util.onPlayerLeave)
+
+    -- Load plugins
+    for _, v in pairs(plugins) do
+        v:create()
     end
 
-    local playerList = server.getPlayers()
-    for i = 1, #playerList do
-        local player = playerList[i]
-        Util.Players.Create(player["steam_id"], player["name"], player["id"], player["admin"], player["auth"])
+    for _, v in pairs(server.getPlayers()) do
+        Util.Players.Create(v["steam_id"], v["name"], v["id"], v["admin"], v["auth"])
     end
-    for steam_id, player in pairs(Util.Players.List) do
-        print(player.name)
-    end
+
+    -- Load Basic commands
+    Util.Commands.Create("plugin List", { "?plugins" }, function(full_message, user_peer_id, is_admin, is_auth, args)
+        for i = 1, #plugins do
+            server.announce(Util.Settings.name, i .. ": " .. plugins[i].name, -1)
+        end
+    end)
 end

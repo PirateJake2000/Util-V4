@@ -69,7 +69,6 @@ function build() {
 
 	for (let i = 0; i < plugins.length; i++) {
 		let plugin = plugins[i];
-		console.log(`Loading plugin ${plugin}`);
 
 		// for each file inside the plugin folder
 		let files = fs.readdirSync(`./src/Plugins/${plugin}`);

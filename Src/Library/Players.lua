@@ -8,18 +8,25 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         isAuth = is_auth,
         vehicle = nil,
 
-        AddVehicle = function(self, vehicle)
-            print("spawned vehicle")
+        -- / Management
+
+        Destroy = function(self)
+            if self.vehicle ~= nil then self.vehicle:Destroy() end
+
+            Util.Players.List[self.peerID] = nil
+        end,
+
+        --/ Getters and Setters
+
+        SetVehicle = function(self, vehicle)
             self.vehicle = vehicle
         end,
 
-        RemoveVehicle = function(self)
-            self.vehicle = {}
+        GetVehicle = function(self)
+            return self.vehicle
         end,
 
-        GetVehicle = function(self)
-            return self.vehicle or error("Player does not have a vehicle")
-        end,
+        --/ Methods
 
         Kill = function(self)
             server.killCharacter(self.objectID)
@@ -51,16 +58,12 @@ function Util.Players.Create(steam_id, name, peer_id, is_admin, is_auth)
         end,
     }
 
-    Util.Players.List[steam_id] = player
+    Util.Players.List[peer_id] = player
     return player
 end
 
-function Util.Players.Get(steam_id)
-    return Util.Players.List[steam_id] or error("Player does not exist")
-end
-
-function Util.Players.Destroy(steam_id)
-    Util.Players.List[steam_id] = nil
+function Util.Players.Get(peer_id)
+    return Util.Players.List[peer_id]
 end
 
 function Util.Players.getSteamID(peer_id)
@@ -77,14 +80,6 @@ function Util.Players.getPeerID(steamID)
             return player.peerID
         end
     end
-end
-
-function Util.Players.Leave(steam_id, name, peer_id, is_admin, is_auth)
-    if Util.Players.Get(steam_id):GetVehicle() ~= {} then
-        Util.Players.Get(steam_id):GetVehicle():DespawnGroup(true)
-    end
-
-    Util.Players.Destroy(steam_id)
 end
 
 Util.Players.List = {}
